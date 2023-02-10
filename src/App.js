@@ -5,7 +5,7 @@ import { fetchItems } from "./api";
 export const AppContext = React.createContext();
 
 const App = () => {
-
+  const [products, setProducts] = useState([]);
   const [orderItems, setOrderItems] = useState([]);
   const [totalFee, setTotalFee] = useState({});
 
@@ -13,26 +13,65 @@ const App = () => {
     getItems();
   }, []);
 
-  const removeLineItem = (lineItemId) => {
-
-  }
-
-  const addLineItem = (lineItem) => {
-
-  }
-
-  const calculateFees = () => {
-
-  }
+  useEffect(() => calculateFees(orderItems), [orderItems]);
 
   const getItems = async () => {
     try {
       const { data } = await fetchItems();
-      console.log('data', data);
       setOrderItems(data);
     } catch (err) {
       console.log('Error while fetching products', err);
     }
+  }
+  const calculateFees = (orderItems) => {
+    let total;
+    if (orderItems?.length <= 0) {
+      return setTotalFee({
+        ...totalFee,
+        subtotal: 0,
+        tax: 0,
+        total: 0,
+        shipping: 0,
+      });
+    }
+
+    const subtotal = orderItems?.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0,
+    );
+    const tax = subtotal * 0.13;
+    const SHIPPING_RATE = 15;
+    total = subtotal + tax + SHIPPING_RATE;
+
+    return setTotalFee({
+      ...totalFee,
+      subtotal,
+      tax,
+      total,
+      shipping: SHIPPING_RATE,
+    });
+  }
+
+  const removeLineItem = (lineItemId) => {
+    const newLineItems = orderItems?.filter(
+      (item) => item.id !== parseInt(lineItemId),
+    );
+
+    products.push(orderItems?.find(
+      (item) => item.id === parseInt(lineItemId)
+    ))
+
+    setProducts([...products])
+    setOrderItems(newLineItems);
+  }
+
+  const addLineItem = (lineItemId) => {
+    const availableProducts = products?.filter(
+      (item) => item.id !== lineItemId.id)
+
+
+    setProducts(availableProducts);
+    setOrderItems([...orderItems, lineItemId]);
   }
 
   return (
@@ -44,7 +83,7 @@ const App = () => {
           calculateFees,
           totalFee
         }}>
-        <Cart orderItems={orderItems} />
+        <Cart orderItems={orderItems} products={products} />
       </AppContext.Provider>
     </div>
   );

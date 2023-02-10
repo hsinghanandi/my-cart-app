@@ -2,7 +2,9 @@ import './styles.css'
 import React, { useContext } from 'react'
 import { AppContext } from '../../App'
 
-const Product = ({ item, stylingVariables }) => {
+const Product = ({ item, stylingVariables, estimatedDelivery, type }) => {
+    const { removeLineItem, addLineItem } = useContext(AppContext);
+
     const swatchColorStyles = {
         display: "inline-block",
         borderRadius: "50%",
@@ -10,6 +12,15 @@ const Product = ({ item, stylingVariables }) => {
         height: "2rem",
         width: "2rem",
     };
+
+    const buttonStyles = {
+        border: "none",
+        font: "inherit",
+        cursor: "pointer",
+        padding: "0",
+        textDecoration: "underline",
+        outline: "none",
+    }
 
     return (
         <div className={`cart-item cart-item-${item.id}`}>
@@ -36,9 +47,28 @@ const Product = ({ item, stylingVariables }) => {
                 </div>
                 <div className="cart-item-delivery">
                     <b>Estimated Delivery Date: </b>
-
+                    <span style={{ color: stylingVariables.BLUE }} placeholder='hello'>
+                        {estimatedDelivery.length <= 0
+                            ? "Enter Postal Code"
+                            : estimatedDelivery
+                                ?.filter((product) => product.ids.includes(item.id))
+                                .map((product) => product.estimatedDeliveryDate)}
+                    </span>
                 </div>
-
+                {type === 'add' ?
+                    <button
+                        type="button"
+                        style={buttonStyles}
+                        onClick={() => addLineItem(item)}>
+                        Add Item
+                    </button>
+                    : <button
+                        type="button"
+                        style={buttonStyles}
+                        onClick={() => removeLineItem(item.id)}>
+                        Remove
+                    </button>
+                }
             </div>
         </div>
     )
