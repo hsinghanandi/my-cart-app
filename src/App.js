@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { fetchItems } from "./api";
 
 //First part given
 const lineItems = [
@@ -33,11 +34,16 @@ const TOTAL = 2382.3161;
 const ESTIMATED_DELIVERY = "Nov 24, 2021";
 
 const App = () => {
+  const [orderItems, setOrderItems] = useState([]);
   const [stylingVariables] = useState({
     BLUE: "#172162",
     LIGHT_GREY: "#6e7484",
     BLACK: "#000000",
   });
+
+  useEffect(() => {
+    getItems();
+  }, []);
 
   const removeLineItem = (lineItemId) => {
 
@@ -49,6 +55,16 @@ const App = () => {
 
   const calculateFees = () => {
 
+  }
+
+  const getItems = async () => {
+    try {
+      const { data } = await fetchItems();
+      console.log('data', data);
+      setOrderItems(data);
+    } catch (err) {
+      console.log('Error while fetching products', err);
+    }
   }
 
   return (
