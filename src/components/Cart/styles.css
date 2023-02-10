@@ -1,0 +1,33 @@
+h3,
+h4 {
+    margin: 0
+}
+
+.cart-container {
+    padding: 3rem;
+    max-width: 1120px;
+    margin: 0 auto
+}
+
+.cart-header {
+    font-size: 4rem;
+}
+
+.cart-items-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem
+}
+
+.cart-item-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    font-weight: bold;
+    margin: 3rem 0;
+}
+
+.cart-summary {
+    display: flex;
+    justify-content: space-between
+}
