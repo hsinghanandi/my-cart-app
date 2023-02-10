@@ -1,0 +1,39 @@
+.cart-item {
+    display: flex;
+    gap: 1rem;
+}
+
+@media screen and (max-width: 740px) {
+    .cart-item {
+        flex-direction: column;
+    }
+
+    img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 300;
+    }
+}
+
+.cart-item-description {
+    flex: auto;
+    text-align: right
+}
+
+.cart-item-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
+
+.cart-item-swatch {
+    display: flex;
+    gap: 8px
+}
+
+.cart-item-delivery {
+    padding: 10px 0;
+    display: flex;
+    justify-content: flex-end
+}
